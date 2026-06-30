@@ -1,6 +1,6 @@
 {
-    "name": "tristate_application",
-    "short_name": "tristate_application",
+    "name": "TriState",
+    "short_name": "TriState",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",

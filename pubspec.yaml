@@ -1,5 +1,5 @@
 name: tristate_application
-description: "A new Flutter project."
+description: "Tristate master services."
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
@@ -34,6 +34,7 @@ dependencies:
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.8
+  curved_navigation_bar: ^1.0.6
 
 dev_dependencies:
   flutter_test:
@@ -46,6 +47,37 @@ dev_dependencies:
   # rules and activating additional ones.
   flutter_lints: ^6.0.0
 
+  # Generates the native launch/splash screen from the logo.
+  flutter_native_splash: ^2.4.0
+
+  # Generates the app launcher icon.
+  flutter_launcher_icons: ^0.14.1
+
+  # Used by tool/pad_splash.dart to pad the Android 12 splash image.
+  image: ^4.0.0
+
+# Native splash configuration. Regenerate after changes with:
+#   dart run flutter_native_splash:create
+flutter_native_splash:
+  color: "#ffffff"
+  image: assets/images/launch_screen.png
+  android_12:
+    color: "#ffffff"
+    # Padded version so the logo fits Android 12's circular icon slot
+    # without being cropped/zoomed. Regenerate with: dart run tool/pad_splash.dart
+    image: assets/images/launch_screen_android12.png
+
+# App launcher icon configuration. Regenerate after changes with:
+#   dart run flutter_launcher_icons
+flutter_launcher_icons:
+  android: true
+  ios: true
+  image_path: "assets/images/launch_screen.png"
+  remove_alpha_ios: true
+  min_sdk_android: 21
+  adaptive_icon_background: "#4285F4"
+  adaptive_icon_foreground: "assets/images/launch_screen.png"
+
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
 
@@ -56,6 +88,9 @@ flutter:
   # included with your application, so that you can use the icons in
   # the material Icons class.
   uses-material-design: true
+
+  assets:
+    - assets/images/
 
   # To add assets to your application, add an assets section, like this:
   # assets:

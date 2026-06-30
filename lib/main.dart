@@ -1,5 +1,10 @@
 import 'package:flutter/material.dart';
-
+import 'package:curved_navigation_bar/curved_navigation_bar.dart';
+import 'screens/dashboard.dart';
+import 'screens/create_invoice.dart';
+import 'screens/invoice.dart';
+import 'screens/profile.dart';
+import 'screens/login.dart';
 void main() {
   runApp(const MyApp());
 }
@@ -11,111 +16,123 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'TriState',
+      debugShowCheckedModeBanner: false,
+      // Theme Configuration:
       theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // TRY THIS: Try running your application with "flutter run". You'll see
-        // the application has a purple toolbar. Then, without quitting the app,
-        // try changing the seedColor in the colorScheme below to Colors.green
-        // and then invoke "hot reload" (save your changes or press the "hot
-        // reload" button in a Flutter-supported IDE, or press "r" if you used
-        // the command line to start the app).
-        //
-        // Notice that the counter didn't reset back to zero; the application
-        // state is not lost during the reload. To reset the state, use hot
-        // restart instead.
-        //
-        // This works for code too, not just values: Most code changes can be
-        // tested with just a hot reload.
-        colorScheme: .fromSeed(seedColor: Colors.deepPurple),
+        scaffoldBackgroundColor: const Color(0xFFF5F7FA),
+        appBarTheme: const AppBarTheme(
+          backgroundColor: Color(0xFFF5F7FA), // AppBar ka background bhi same ho jayega
+          elevation: 0,
+        ),
       ),
-      home: const MyHomePage(title: 'Home Page'),
+      home: const LoginScreen(),
     );
   }
 }
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
-
-  // This widget is the home page of your application. It is stateful, meaning
-  // that it has a State object (defined below) that contains fields that affect
-  // how it looks.
-
-  // This class is the configuration for the state. It holds the values (in this
-  // case the title) provided by the parent (in this case the App widget) and
-  // used by the build method of the State. Fields in a Widget subclass are
-  // always marked "final".
-
-  final String title;
+// Hum StatefulWidget use kar rahe hain kyun ke tabs click hone par screen change hogi
+class MainScreen extends StatefulWidget {
+  const MainScreen({super.key});
 
   @override
-  State<MyHomePage> createState() => _MyHomePageState();
+  State<MainScreen> createState() => _MainScreenState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
+class _MainScreenState extends State<MainScreen> {
+  
+  // current tab index
+  int _selectedIndex = 0;
 
-  void _incrementCounter() {
+  // when click on tab update index function
+  void _onItemTapped(int index) {
     setState(() {
-      // This call to setState tells the Flutter framework that something has
-      // changed in this State, which causes it to rerun the build method below
-      // so that the display can reflect the updated values. If we changed
-      // _counter without calling setState(), then the build method would not be
-      // called again, and so nothing would appear to happen.
-      _counter++;
+      _selectedIndex = index; // Is se screen reload ho kar nayi selected screen dikhayegi
     });
   }
 
+  final List<String> _titles = [
+    'Dashboard',
+    'Create Daily Invoice',
+    'My Invoices',
+    'Profile',
+  ];
+
   @override
   Widget build(BuildContext context) {
-    // This method is rerun every time setState is called, for instance as done
-    // by the _incrementCounter method above.
-    //
-    // The Flutter framework has been optimized to make rerunning build methods
-    // fast, so that you can just rebuild anything that needs updating rather
-    // than having to individually change instances of widgets.
+    // Build screens here so each one receives the tab-switch callback.
+    final List<Widget> screens = [
+      Dashboard(onNavigate: _onItemTapped),
+      CreateInvoice(onNavigate: _onItemTapped),
+      Invoice(onNavigate: _onItemTapped),
+      Profile(onNavigate: _onItemTapped),
+    ];
     return Scaffold(
+      extendBody: true,
       appBar: AppBar(
-        // TRY THIS: Try changing the color here to a specific color (to
-        // Colors.amber, perhaps?) and trigger a hot reload to see the AppBar
-        // change color while the other colors stay the same.
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        // Here we take the value from the MyHomePage object that was created by
-        // the App.build method, and use it to set our appbar title.
-        title: Text(widget.title),
-      ),
-      body: Center(
-        // Center is a layout widget. It takes a single child and positions it
-        // in the middle of the parent.
-        child: Column(
-          // Column is also a layout widget. It takes a list of children and
-          // arranges them vertically. By default, it sizes itself to fit its
-          // children horizontally, and tries to be as tall as its parent.
-          //
-          // Column has various properties to control how it sizes itself and
-          // how it positions its children. Here we use mainAxisAlignment to
-          // center the children vertically; the main axis here is the vertical
-          // axis because Columns are vertical (the cross axis would be
-          // horizontal).
-          //
-          // TRY THIS: Invoke "debug painting" (choose the "Toggle Debug Paint"
-          // action in the IDE, or press "p" in the console), to see the
-          // wireframe for each widget.
-          mainAxisAlignment: .center,
-          children: [
-            const Text('You have pushed the button this many times Hello World:'),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headlineMedium,
-            ),
-          ],
+        backgroundColor: const Color(0xFFF5F7FA),
+        elevation: 0, 
+        scrolledUnderElevation: 0,
+        bottom: PreferredSize(
+          preferredSize: const Size.fromHeight(1.0),
+          child: Container(
+            color: Color(0x1F000000), // (divider)
+            height: 1.0,
+          ),
         ),
+        
+        // Show title according to selected tab 
+        title: Padding(
+          padding: const EdgeInsets.only(left: 8.0),
+          child: Text(
+            _titles[_selectedIndex], 
+            style: const TextStyle(
+              color: Color(0xFF0b1f3a), 
+              fontSize: 20,             
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ),
+        
+        // Avatar 
+        actions: [
+          Padding(
+            padding: const EdgeInsets.only(right: 16.0),
+            child: CircleAvatar(
+              radius: 18,
+              backgroundColor: Color(0xffbdbdbd), // Grey circle background
+              child: const Text(
+                'J',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 14,
+                ),
+              ),
+            ),
+          ),
+        ],
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
+      
+      // show tab screen show
+      body: screens[_selectedIndex],
+
+      bottomNavigationBar: CurvedNavigationBar(
+        index: _selectedIndex,
+        height: 60.0,
+        color: const Color(0xFF3B82F6),
+        buttonBackgroundColor: const Color(0xFF3B82F6),
+        backgroundColor: const Color(0xFFF5F7FA),
+        // backgroundColor: Colors.transparent,
+        animationCurve: Curves.easeInOut,
+        animationDuration: const Duration(milliseconds: 400),
+        onTap: _onItemTapped,
+        items: const [
+          Icon(Icons.home_outlined, size: 30, color: Colors.white),
+          Icon(Icons.add_circle_outline_rounded, size: 30, color: Colors.white),
+          Icon(Icons.receipt_long_rounded, size: 30, color: Colors.white),
+          Icon(Icons.account_circle_outlined, size: 30, color: Colors.white),
+        ],
       ),
     );
   }
