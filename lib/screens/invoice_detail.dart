@@ -96,7 +96,10 @@ class InvoiceDetail extends StatelessWidget {
     ),
   ];
 
-  static const String _comments = "upgrade, new drop ran";
+  static const String _comments =
+      "Installed new ONT and ran a fresh aerial drop to the NID. "
+      "Configured customer router, verified WiFi levels in all rooms, "
+      "and confirmed service is active. No further action required.";
 
   // Sum of every line item's total.
   double get _techTotal =>
